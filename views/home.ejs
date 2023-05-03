@@ -1,15 +1,18 @@
 <html>
     <head>
+        <link rel="stylesheet" href="/CSS/style.css">
         <title>
             <%= title%>
+             
+    
         </title>
     </head>
     <body>
         <%- include('header'); %>
 
-         <h1>
+         <h1 id="head">
             create / <%= title%>
          </h1>
-         <%- '_footer'; %>
+         <%- include('footer'); %>
     </body>
 </html>

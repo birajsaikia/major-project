@@ -12,6 +12,10 @@ let userschema = new mongoose.Schema({
     name: {
         type: String,
         required: true
+    },
+    phoneN: {
+        type: String,
+        require: true
     }
 },{
     timestamps: true

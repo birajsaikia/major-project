@@ -1,0 +1,10 @@
+body{
+    text-align: center;
+    background-color: blueviolet;
+}
+#head{
+    color: brown;
+}
+ul{
+    list-style-type: none;
+}

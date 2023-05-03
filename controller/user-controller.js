@@ -7,18 +7,47 @@ module.exports.home = function(req, res){
 
 
 module.exports.signUp = function(req, res){
+    if(req.isAuthenticated()){
+        return res.redirect('/user/profile')
+    }
+
     return res.render('user_sign_up', {
         title: "codilal | sign up"
     })
 }
-module.exports.proFile = function(req, res){
-    return res.render('profile', {
-        title: "codilal | profile"
-    })
+module.exports.proFile = async function(req, res){
+    
+    // return res.render('profile', {
+    //     title: "codilal | profile",
+    //     // user: user
+    // })
+    // if(req.cookies.user_id){
+    //     User.findById(req.cookies.user_id, function(err, user){
+    //         console.log(err);
+    //         if(user){
+               if(req.isAuthenticated()){ 
+                return res.render('profile', {
+                    title: "User profile",
+                    user: req.user
+                })
+            }
+            // }
+            return res.redirect('/user/signin')
+               
+        // });
+
+    // }
+    // else{
+    //     return res.redirect('/user/signin')
+    // }
 }
 
 
 module.exports.signIn = function(req, res){
+    if(req.isAuthenticated()){
+        return res.redirect('/user/profile')
+    }
+
     return res.render('user_sign_in', {
         title: "codilal | sign in"
     })
@@ -48,15 +77,40 @@ module.exports.create = async function(req, res){
 
 
 }
+// module.exports.createSession = async function(req, res){
+//     console.log(req.body)
+//     let user = await User.findOne({ email: req.body.email });
+//     //if user esist
+//     console.log(user);
+//     console.log(user.password, req.body.password);
+//     if(user){
+
+//         if(user.password != req.body.password){
+//             return res.redirect('back');
+//         }
+//         res.cookie('user_id', user.id);
+//         console.log(res.cookie);
+//         return res.redirect("/user/profile")
+//     }
+//     else{
+//         return res.redirect("back")
+//     }
+// }
+
 
 module.exports.createSession = async function(req, res){
-    let user = await User.findOne({ email: req.body.email });
-    //if user esist
-    if(user){
-        if(user.password != user.body.password){
-            return res.redirect('back');
+    return res.redirect('/');
+}
+
+module.exports.destroyession = async function(req, res){
+    req.logout(
+        function(err){
+            if(err){
+                console.log(err);
+            }
         }
-        res.cookie('user_id', user.id);
-        return res.redirect("/user/profile")
-    }
+    );
+    
+
+    return res.redirect('/');
 }
