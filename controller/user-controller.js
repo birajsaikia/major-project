@@ -1,4 +1,6 @@
-let User = require('../models/user')
+let User = require('../models/user');
+let fs = require('fs');
+let path = require('path')
 
 module.exports.home = function(req, res){
     return res.end('<h1>Euser profile</h1>')
@@ -16,32 +18,72 @@ module.exports.signUp = function(req, res){
     })
 }
 module.exports.proFile = async function(req, res){
-    
-    // return res.render('profile', {
-    //     title: "codilal | profile",
-    //     // user: user
-    // })
-    // if(req.cookies.user_id){
-    //     User.findById(req.cookies.user_id, function(err, user){
-    //         console.log(err);
-    //         if(user){
-               if(req.isAuthenticated()){ 
-                return res.render('profile', {
+
+         User.findById(req.params.id , function(err, user){
+            return res.render('profile', {
                     title: "User profile",
-                    user: req.user
+                    user: req.user,
+                    profile_user: user
                 })
-            }
-            // }
-            return res.redirect('/user/signin')
-               
-        // });
-
-    // }
-    // else{
-    //     return res.redirect('/user/signin')
-    // }
+         })      
+                
+            
+            // return res.redirect('/user/signin')
 }
+// module.exports.Update = async function(req, res){
+//     if(req.user.id == req.params.id){
+//         let user = User.findByIdAndUpdate(req.params.id, req.body);
+//         if(user){
+//             return res.redirect('back');
+//         }
+//     }else{
+//         return res.status(401).send('unathorize')
+//     }
+// }
 
+module.exports.Update = async function(req, res){
+    // if(req.user.id == req.params.id){
+    //     User.findByIdAndUpdate(req.params.id, req.body, function(err, user){
+    //         if(err){
+    //             console.log(err)
+    //         }
+    //          return res.redirect('back');
+    //     });
+    // }else{
+    //     return res.status(401).send('unathorize')
+    // }
+
+    if(req.user.id == req.params.id){
+        try{
+        let user = await User.findById(req.params.id);
+         User.uploadedAvatar(req, res, function(err){
+            if(err){
+                console.log(err)
+            }
+            user.name = req.body.name;
+            user.email = req.body.email;
+            
+            if(req.file){
+                if(user.avatar){
+                     fs.unlinkSync(path.join(__dirname, '..', user.avatar))
+                }
+                user.avatar = User.avatarPath + '/' + req.file.filename;
+            }
+
+            user.save();
+            
+            return res.redirect('back');
+
+        })
+    }catch(err){
+        req.flash('error', err);
+        console.log(err);
+    }
+    }else{
+        return res.status(401).send('unathorize')
+    }
+
+}
 
 module.exports.signIn = function(req, res){
     if(req.isAuthenticated()){
@@ -99,6 +141,7 @@ module.exports.create = async function(req, res){
 
 
 module.exports.createSession = async function(req, res){
+    req.flash('success', 'signup success');
     return res.redirect('/');
 }
 
@@ -110,6 +153,7 @@ module.exports.destroyession = async function(req, res){
             }
         }
     );
+    req.flash('success', 'logout success');
     
 
     return res.redirect('/');

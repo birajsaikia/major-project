@@ -5,7 +5,9 @@ const homecontroler = require('../controller/hom-controler');
 
 router.get('/' , homecontroler.home)
 router.use('/user' , require('./user'));
-router.use('/posts' , require('./posts'));
+router.use('/posts', require('./posts'));
+router.use('/comments', require('./comments'));
+router.use('/api', require('./api'))
 
 
 console.log('router load');

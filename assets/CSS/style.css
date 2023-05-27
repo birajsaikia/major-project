@@ -6,5 +6,32 @@ body{
     color: brown;
 }
 ul{
+    /* display: flex; */
     list-style-type: none;
+}
+header ul{
+    display: flex;
+    margin: 0px 0px 0px  1150px;
+}
+
+header ul li{
+    margin: 0px 10px;
+}
+header{
+    font-size: larger;
+
+    font-weight: bolder;
+    display: flex;
+}
+footer{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+footer div{
+    margin: 0px 100px;
+}
+#div1{
+    border-right: 5px black solid;
+    /* border-top-left-radius: 10px black solid; */
 }

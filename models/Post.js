@@ -1,13 +1,23 @@
+// s
+
 let mongoose = require('mongoose');
 let postschema = new mongoose.Schema({
     content: {
-        typr: String,
+        type: String,
         required: true
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }
+        ref: 'User',
+        required: true
+
+    },
+    comments: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Comment',
+        }
+    ]
 },{
     timestamps: true
 });

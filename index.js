@@ -9,7 +9,8 @@ const passport  = require('passport');
 const passportLocal = require('./confic/passport-local-strategy');
 const MongoStore = require('connect-mongo');
 const sassMiddleware = require('node-sass-middleware');
-
+const flash = require('connect-flash');
+const custoMwire = require('./confic/middleware');
 
 
 
@@ -26,6 +27,7 @@ app.use(express.urlencoded());
 app.use(cookieParser());
 
 app.use(express.static('assets'));
+app.use('/uploads', express.static(__dirname + '/uploads'))
 
 // app.use(expressLayouts);
 // // extract style and scripts from sub pages into the layout
@@ -69,7 +71,7 @@ app.use(session({
     },
     store: MongoStore.create(
         {
-            mongoUrl:"mongodb://0.0.0.0:27017/codeial_development",
+            mongoUrl:"mongodb://0.0.0.0:27017/codeialdevelopment2",
             autoRemove: 'disabled'
         },
         function(err){
@@ -83,6 +85,9 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.setAuthenticatedUser);
+
+app.use(flash());
+app.use(custoMwire.setFlash);
 
 // use express router
 app.use('/', require('./router'));

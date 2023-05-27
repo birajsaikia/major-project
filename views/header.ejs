@@ -1,9 +1,11 @@
 <header>
+    <div>
     This is Header
-
+    </div>
+    <div>
     <ul>
         <% if(locals.user){ %>
-            <li><a href="/user/profile">Profile</a></li>
+            <li><a href="/user/profile/<%= user.id%>">Profile</a></li>
             <li><%= user.name %></li>
             <li><a href="/user/signout">signout</a></li>
 
@@ -12,4 +14,5 @@
             <li><a href="/user/signup">signup</a></li>
         <% } %>
     </ul>
+    </div>
 </header>
