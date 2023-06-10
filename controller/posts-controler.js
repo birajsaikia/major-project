@@ -1,5 +1,6 @@
 let Post = require("../models/Post");
-let Comment = require('../models/comment')
+let Comment = require('../models/comment');
+let Like = require("../models/like")
 
 module.exports.create = async function(req, res) {
     try{
@@ -26,9 +27,13 @@ module.exports.create = async function(req, res) {
     
 }
 
-module.exports.destroy = function(req, res){
+module.exports.destroy =async function(req, res){
     Post.findById(req.params.id, function(err, post){
         if(post.user == req.user.id){
+
+            Like.deleteMany({likeable: post, onModel:'Post'});
+            Like.deleteMany({_id: {$in: post.comments}});
+
             req.flash('success', 'post delated successfully')
             post.remove();
 

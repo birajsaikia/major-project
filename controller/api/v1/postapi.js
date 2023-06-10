@@ -22,7 +22,7 @@ module.exports.index =async function(req, res){
 module.exports.destroy = async function(req, res){
     try{
     let post = await Post.findById(req.params.id)
-        // if(post.user == req.user.id){
+        if(post.user == req.user.id){
             // req.flash('success', 'post delated successfully')
             post.remove();
 
@@ -32,7 +32,12 @@ module.exports.destroy = async function(req, res){
                 return res.json(200, {
                     massage: 'post delated'
                 })
-        }catch(err){
+        }else{
+           return res.json(401,{
+            massage: 'post not delated'
+           })
+        }}
+        catch(err){
             console.log(err);
     }            
     

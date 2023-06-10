@@ -17,7 +17,7 @@ Usercontroler.Update)
 router.get('/signup', Usercontroler.signUp);
 router.get('/signin', Usercontroler.signIn);
 
-router.post('/create', Usercontroler.create);
+router.post('/create',  Usercontroler.create);
 
 
 
@@ -30,6 +30,9 @@ router.post('/createsession',
 Usercontroler.createSession)
 
 router.get('/signout', Usercontroler.destroyession)
+
+router.get('/auth/google', passport.authenticate('google', {scope: ['profile', 'email']}));
+router.get('/auth/google/callback', passport.authenticate('google', {failureRedirect: '/user/signin'}), Usercontroler.createSession);
 
 
 console.log('user router load');

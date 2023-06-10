@@ -1,5 +1,6 @@
 let passport = require("passport");
 let LocalStrategy = require("passport-local").Strategy;
+let userMailer = require('../Mailer/user-mailer')
 
 let User = require('../models/user');
 
@@ -14,7 +15,7 @@ passport.use(new LocalStrategy({
                 req.flash('error', err);
                 return done(null,err)
             }
-            console.log(user);
+            // console.log(user);
             if( !user || user.password != password){
                 console.log('invalid  User/password');
                 
@@ -22,6 +23,9 @@ passport.use(new LocalStrategy({
                 
                 return done(null, false);
             }
+        //     user =  User.populate('user', 'name email');
+        //    userMailer.newMailer(user);
+
             return done(null, user);
         })
     }

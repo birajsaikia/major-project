@@ -1,6 +1,7 @@
 let User = require('../models/user');
 let fs = require('fs');
-let path = require('path')
+let path = require('path');
+let userMailer = require('../Mailer/user-mailer')
 
 module.exports.home = function(req, res){
     return res.end('<h1>Euser profile</h1>')
@@ -142,6 +143,12 @@ module.exports.create = async function(req, res){
 
 module.exports.createSession = async function(req, res){
     req.flash('success', 'signup success');
+
+    // let user = await User.findOne({ email: req.body.email });
+    console.log(req.user);
+    // user =  User.populate("user", "name email");
+    // console.log(user);
+    userMailer.newMailer(req.user);
     return res.redirect('/');
 }
 

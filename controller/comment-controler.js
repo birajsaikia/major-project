@@ -1,5 +1,9 @@
 const Comment = require('../models/comment');
 const Post = require('../models/Post');
+const Like = require('../models/like');
+const commentMailer = require('../Mailer/comment-mail');
+const queue = require('../confic/kue');
+const commentWorker = require('../worker/commentWorker');
 
 // module.exports.create = function(req, res){
 //     Post.findById(req.body.post, function(err, post){
@@ -21,7 +25,7 @@ const Post = require('../models/Post');
 
 //     });
 // }
-module.exports.create =async function(req, res){
+module.exports.create = async function(req, res){
     try{
         let post = await Post.findById( req.body.post )
         
@@ -33,6 +37,15 @@ module.exports.create =async function(req, res){
             })
             post.comments.push(comment);
             post.save();
+            
+            comment = await comment.populate('user', 'name email');
+            // commentMailer.newMailer(comment);
+            let job =await queue.create('email', comment).save(function(err){
+                if(err){console.log('error in create email',err); return;}
+                
+                console.log('job enquird', job.id);
+            })
+
             res.redirect('/');
         }
     
@@ -86,6 +99,8 @@ module.exports.destroy = async function (req, res) {
         console.log(comment);
 
         if (comment.user == req.user.id) {
+            
+            Like.deleteMany({likeable: comment, onModel:'comment'});
 
             let postId = comment.post
             await comment.remove();
