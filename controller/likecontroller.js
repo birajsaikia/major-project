@@ -10,7 +10,7 @@ module.exports.taggolelike = async(req, res)=>{
         let likeable;
         let deleter = false;
 
-        if (req.query.type = 'post') {
+        if (req.query.type = 'Post') {
             likeable = await Post.findById(req.query.id).populate('likes');
         } else {
             likeable = await Comment.findById(req.query.id).populate('likes');
@@ -37,12 +37,7 @@ module.exports.taggolelike = async(req, res)=>{
             likeable.save();
         }
 
-        return res.json(200, {
-            message: "request successfull",
-            data:{
-                deleter : deleter
-            }
-        })
+        return res.redirect('back')
     } catch (err) {
         console.log("error in like in post: ", err)
     }

@@ -21,7 +21,7 @@
             create / <%= title%>
          </h1>
          <%- include('footer'); %>
-
+         <%- include('chat-box'); %>
          <script>
             <% if(flash.success && flash.success.length > 0){%>
 
@@ -55,6 +55,14 @@
                 let toggleLike = ToggleLike(self)
             })
          </script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.2/socket.io.js"></script>
+         
+         <% if(locals.user) { %>
+            <script>
+                new ChatEngine('user-chat-box', '<%= locals.user.email%>')
+            </script>
+        <%}%>
+        <script src="/js/chat-engine.js"></script>
     </body>
 
     
